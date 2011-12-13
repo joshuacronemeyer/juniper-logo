@@ -1,25 +1,35 @@
+float rot0 = 0.0;
+int nX, nY;
+JuniperBurst juniper0;
+
 void setup()
 {
   size(800,800);
   frameRate(20);
+  juniper0 = new JuniperBurst(new Poynt(400,400));
+  juniper0.reset();
 }
-
-float rot0 = 0.0;
-float rot1 = 0.0;
-float size0 = 1;
-float size1 = 1;
-int nX, nY;
 
 void draw(){
   background( 255 );  
-  JuniperBurst juniper = new JuniperBurst(600,400,rot0,100*size0);
-  JuniperBurst juniper2 = new JuniperBurst(200,400,rot1,100*size1);
-  rot0 = nY*PI/100;
-  size0 = abs(cos(400/(nX+130))) + 1;
-  rot1 += PI/500;
-  size1 = abs(sin(size1)) + 1;  
-  juniper.display();
-  juniper2.display();
+   
+  if(keyPressed) {
+    if (key == 'x') {
+      juniper0.addJShape();
+    }
+    if (key == 'z') {
+      juniper0.removeJShape();
+    }
+    if (key == 'y') {
+      juniper0.fatter();
+    }
+    if (key == 'u') {
+      juniper0.thinner();
+    }
+  }
+  rot0 += PI/500;
+  juniper0.setTilt(rot0);
+  juniper0.display();
 }
 
 void mouseMoved(){
@@ -28,60 +38,121 @@ void mouseMoved(){
 }
 
 class BasicJShape {
-  float x, y;
-  float tilt;
-  float angle;
-  float scalar;
+  float tilt, scalar;
   int alpha;
+  Poynt center, topLeft, topRight, bottom;
+  final int defaultCurve = -115;
   
-  BasicJShape(int xpos, int ypos, float t, float s, int a) {
-    x = xpos;
-    y = ypos;
+  BasicJShape(Poynt c, float t, float s, int a) {
+    center = c;
     tilt = t;
     scalar = s / 100.0;
     alpha = a;
+    topLeft = new Poynt(-33, -50);
+    topRight = new Poynt(33, -50);
+    bottom = new Poynt(0, 70);
   }
+  
   void display() {
     noStroke();
     fill( 0, 121, 184, alpha );  
     pushMatrix();
-    translate(x, y);
+    translate(center.getX(), center.getY());
     rotate(tilt);
     scale(scalar);
-    beginShape();
-    vertex(-25,-50);
-    bezierVertex(-25, -90, 25, -90, 25, -50);
-    vertex(0, 70);
+    beginShape();  
+    vertex(topLeft.getX(), topLeft.getY());
+    bezierVertex(topLeft.getX() - 15, defaultCurve, topRight.getX() + 15, defaultCurve, topRight.getX(), topRight.getY());
+    vertex(bottom.getX(), bottom.getY());
     endShape();
     popMatrix();
   }
+  
+  void setTilt(float t) {
+    tilt = t;
+  }
+  
+  void fatness(int f){
+    int half = (int)(f/2);
+    topLeft = new Poynt(-half, -50);
+    topRight = new Poynt(half, -50);
+  }
+  
 }
 
 class JuniperBurst {
-  float x, y, scalar, tilt;
-  BasicJShape j0,j1,j2,j3,j4,j5,j6,j7;
-  JuniperBurst(int xpos, int ypos, float t, float s) {
-    x = xpos;
-    y = ypos;
-    scalar = s;
-    tilt = t;
-    j0 = new BasicJShape(x, y, (0) + tilt, s, 180);
-    j1 = new BasicJShape(x, y, (PI/4) + tilt, s, 100);
-    j2 = new BasicJShape(x, y, (PI/2) + tilt, s, 100);
-    j3 = new BasicJShape(x, y, (3*PI/4) + tilt, s, 100);
-    j4 = new BasicJShape(x, y, (PI) + tilt, s, 100);
-    j5 = new BasicJShape(x, y, (5*PI/4) + tilt, s, 100);
-    j6 = new BasicJShape(x, y, (3*PI/2) + tilt, s, 100);
-    j7 = new BasicJShape(x, y, (7*PI/4) + tilt, s, 100);
+  Poynt position;
+  float scalar, tilt;
+  ArrayList jShapes;
+  int fatness;
+  
+  JuniperBurst(Poynt pos) {
+    fatness = 68;
+    position = pos;
+    scalar = 200;
+    tilt = 0;
+    jShapes = new ArrayList();
   }
-  void display() { 
-    j0.display();
-    j1.display();
-    j2.display();
-    j3.display();
-    j4.display();
-    j5.display();
-    j6.display();
-    j7.display();
+  
+  void display() {
+    for(int i=0; i < jShapes.size(); i++) {
+      jShapes.get(i).setTilt(pointOrientation(i) + tilt);
+      jShapes.get(i).fatness(fatness);
+      jShapes.get(i).display();
+    } 
+  }
+  
+  void addJShape(){
+    jShapes.add(new BasicJShape(position, tilt, scalar, 100));
+  }
+  
+  void removeJShape(){
+    jShapes.remove(jShapes.size() - 1);
+  }
+  
+  void setTilt(float t) {
+    tilt = t;
+  }
+  
+  void setScalar(float s) {
+    scalar = s;
+  }
+  
+  void fatter() {
+    fatness += 1;
+  }
+  
+  void thinner() {
+    fatness -= 1;
+  }
+  
+  float pointOrientation(int index) {
+    return ((2*index)*PI/jShapes.size());
+  }
+  
+  void reset() {
+    jShapes = new ArrayList();
+    jShapes.add(new BasicJShape(position, (0) + tilt, scalar, 180));
+    for(int i=0; i < 5; i++) {
+      addJShape();
+    }
+  }
+}
+
+class Poynt {
+  int x;
+  int y;
+  
+  Poynt(int thatX, int thatY) {
+    x = thatX;
+    y = thatY;
+  }
+
+  int getX() {
+    return x;
+  }
+  
+  int getY() {
+    return y;
   }
 }
