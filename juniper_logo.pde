@@ -1,18 +1,30 @@
 void setup()
 {
-  size(400,400);
+  size(800,800);
   frameRate(20);
 }
-float rot = 0.0;
-float pulse = 1;
-void draw(){  
-  X = width / 2;  
-  Y = height / 2;
+
+float rot0 = 0.0;
+float rot1 = 0.0;
+float size0 = 1;
+float size1 = 1;
+int nX, nY;
+
+void draw(){
   background( 255 );  
-  JuniperBurst juniper = new JuniperBurst(200,200,rot,100*pulse);
-  rot += PI/500;
-  pulse = abs(sin(rot)) + 1;  
+  JuniperBurst juniper = new JuniperBurst(600,400,rot0,100*size0);
+  JuniperBurst juniper2 = new JuniperBurst(200,400,rot1,100*size1);
+  rot0 = nY*PI/100;
+  size0 = abs(cos(400/(nX+130))) + 1;
+  rot1 += PI/500;
+  size1 = abs(sin(size1)) + 1;  
   juniper.display();
+  juniper2.display();
+}
+
+void mouseMoved(){
+  nX = mouseX;
+  nY = mouseY;  
 }
 
 class BasicJShape {
@@ -20,16 +32,18 @@ class BasicJShape {
   float tilt;
   float angle;
   float scalar;
+  int alpha;
   
-  BasicJShape(int xpos, int ypos, float t, float s) {
+  BasicJShape(int xpos, int ypos, float t, float s, int a) {
     x = xpos;
     y = ypos;
     tilt = t;
     scalar = s / 100.0;
+    alpha = a;
   }
   void display() {
     noStroke();
-    fill( 0, 121, 184, 100 );  
+    fill( 0, 121, 184, alpha );  
     pushMatrix();
     translate(x, y);
     rotate(tilt);
@@ -51,14 +65,14 @@ class JuniperBurst {
     y = ypos;
     scalar = s;
     tilt = t;
-    j0 = new BasicJShape(x, y, (0) + tilt, s);
-    j1 = new BasicJShape(x, y, (PI/4) + tilt, s);
-    j2 = new BasicJShape(x, y, (PI/2) + tilt, s);
-    j3 = new BasicJShape(x, y, (3*PI/4) + tilt, s);
-    j4 = new BasicJShape(x, y, (PI) + tilt, s);
-    j5 = new BasicJShape(x, y, (5*PI/4) + tilt, s);
-    j6 = new BasicJShape(x, y, (3*PI/2) + tilt, s);
-    j7 = new BasicJShape(x, y, (7*PI/4) + tilt, s);
+    j0 = new BasicJShape(x, y, (0) + tilt, s, 180);
+    j1 = new BasicJShape(x, y, (PI/4) + tilt, s, 100);
+    j2 = new BasicJShape(x, y, (PI/2) + tilt, s, 100);
+    j3 = new BasicJShape(x, y, (3*PI/4) + tilt, s, 100);
+    j4 = new BasicJShape(x, y, (PI) + tilt, s, 100);
+    j5 = new BasicJShape(x, y, (5*PI/4) + tilt, s, 100);
+    j6 = new BasicJShape(x, y, (3*PI/2) + tilt, s, 100);
+    j7 = new BasicJShape(x, y, (7*PI/4) + tilt, s, 100);
   }
   void display() { 
     j0.display();
