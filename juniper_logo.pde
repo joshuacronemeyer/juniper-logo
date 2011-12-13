@@ -14,17 +14,19 @@ void draw(){
   background( 255 );  
    
   if(keyPressed) {
-    if (key == 'x') {
-      juniper0.addJShape();
+    if (key == CODED) {
+      if (keyCode == UP) {
+        juniper0.addJShape();
+      } else if (keyCode == DOWN) {
+        juniper0.removeJShape();
+      } else if (keyCode == LEFT) {
+        juniper0.thinner();
+      } else if (keyCode == RIGHT) {
+        juniper0.fatter();
+      }
     }
-    if (key == 'z') {
-      juniper0.removeJShape();
-    }
-    if (key == 'y') {
-      juniper0.fatter();
-    }
-    if (key == 'u') {
-      juniper0.thinner();
+    if (key == ESC) {
+      juniper0.reset();
     }
   }
   rot0 += PI/500;
@@ -85,9 +87,12 @@ class JuniperBurst {
   float scalar, tilt;
   ArrayList jShapes;
   int fatness;
+  final int default_fatness = 68;
+  final int first_node_default_alpha = 180;
+  final int default_alpha = 100;
   
   JuniperBurst(Poynt pos) {
-    fatness = 68;
+    fatness = default_fatness;
     position = pos;
     scalar = 200;
     tilt = 0;
@@ -103,7 +108,11 @@ class JuniperBurst {
   }
   
   void addJShape(){
-    jShapes.add(new BasicJShape(position, tilt, scalar, 100));
+    int alpha = default_alpha;
+    if (jShapes.size() == 0) {
+      alpha = first_node_default_alpha;
+    }
+    jShapes.add(new BasicJShape(position, tilt, scalar, alpha));
   }
   
   void removeJShape(){
@@ -131,9 +140,9 @@ class JuniperBurst {
   }
   
   void reset() {
+    fatness = default_fatness;
     jShapes = new ArrayList();
-    jShapes.add(new BasicJShape(position, (0) + tilt, scalar, 180));
-    for(int i=0; i < 5; i++) {
+    for(int i=0; i < 6; i++) {
       addJShape();
     }
   }
