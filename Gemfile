@@ -10,8 +10,9 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-group :test do
+group :test, :development do
   # Pretty printed test output
   gem 'turn', '0.8.2', :require => false
   gem 'sqlite3'
+  gem "heroku"
 end
