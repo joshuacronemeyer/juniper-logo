@@ -28,6 +28,10 @@ void draw(){
     if (key == ESC) {
       juniper0.reset();
     }
+    if (key == 's') {
+      String json = juniper0.toJSON();
+      console.log(json);
+    }
   }
   rot0 += PI/500;
   juniper0.setTilt(rot0);
@@ -80,12 +84,16 @@ class BasicJShape {
     topRight = new Poynt(half, -50);
   }
   
+  String toJSON(){
+    return "{center: { x:" + center.getX() + ", y:" + center.getY() + " }, tilt:" + tilt + ", scalar:" + scalar + ", alpha:" + alpha + " }";
+  }
+  
 }
 
 class JuniperBurst {
   Poynt position;
   float scalar, tilt;
-  ArrayList jShapes;
+  ArrayList petals;
   int fatness;
   final int default_fatness = 68;
   final int first_node_default_alpha = 180;
@@ -96,27 +104,27 @@ class JuniperBurst {
     position = pos;
     scalar = 200;
     tilt = 0;
-    jShapes = new ArrayList();
+    petals = new ArrayList();
   }
   
   void display() {
-    for(int i=0; i < jShapes.size(); i++) {
-      jShapes.get(i).setTilt(pointOrientation(i) + tilt);
-      jShapes.get(i).fatness(fatness);
-      jShapes.get(i).display();
+    for(int i=0; i < petals.size(); i++) {
+      petals.get(i).setTilt(pointOrientation(i) + tilt);
+      petals.get(i).fatness(fatness);
+      petals.get(i).display();
     } 
   }
   
   void addJShape(){
     int alpha = default_alpha;
-    if (jShapes.size() == 0) {
+    if (petals.size() == 0) {
       alpha = first_node_default_alpha;
     }
-    jShapes.add(new BasicJShape(position, tilt, scalar, alpha));
+    petals.add(new BasicJShape(position, tilt, scalar, alpha));
   }
   
   void removeJShape(){
-    jShapes.remove(jShapes.size() - 1);
+    petals.remove(petals.size() - 1);
   }
   
   void setTilt(float t) {
@@ -136,16 +144,33 @@ class JuniperBurst {
   }
   
   float pointOrientation(int index) {
-    return ((2*index)*PI/jShapes.size());
+    return ((2*index)*PI/petals.size());
   }
   
   void reset() {
     fatness = default_fatness;
-    jShapes = new ArrayList();
+    petals = new ArrayList();
     for(int i=0; i < 6; i++) {
       addJShape();
     }
   }
+  
+  String toJSON() {
+    return "{ position:{ x:" + position.getX() + ", y:" + position.getY() + "}, scalar:" + scalar + ", tilt:" + tilt + ", fatness:" + fatness + ", petals:" + petalsToJSON() + " }";
+  }
+  
+  String petalsToJSON() {
+    String json = "[";
+    for(int i=0; i < petals.size(); i++) {
+      json = json + petals.get(i).toJSON();
+      if (i < (petals.size() - 1)){
+        json = json + ", ";
+      }
+    }
+    json = json + "]";
+    return json;
+  }
+  
 }
 
 class Poynt {
