@@ -1,0 +1,73 @@
+/***
+
+Biblioteka
+Version 0
+Peter Behr made this
+http://peterbehr.net
+
+***/
+
+
+
+/* BEGIN general classes */
+
+/* positioning and text alignment */
+
+.left { float: left; }
+.right { float: right; }
+.clear { clear: both; }
+.center { margin-left: auto; margin-right: auto; }
+.baseline { vertical-align: baseline; }
+.middle { vertical-align: middle; }
+.text_justify { text-align: justify; }
+.text_center { text-align: center; }
+.text_left { text-align: left; }
+.text_right { text-align: right; }
+
+/* dimensions */
+
+.zero { width: 0px; height: 0px; }
+
+/* display */
+
+.block { display: block; }
+.inline { display: inline; }
+.hidden { display: none; }
+
+/* type */
+
+.biggest { font-size: 36px; }
+.bigger { font-size: 24px; }
+.big { font-size: 18px; }
+.medium { font-size: 14px; }
+.small { font-size: 12px; }
+.smaller { font-size: 10px; }
+.smallest { font-size: 8px; }
+.lightest { font-weight: 100; }
+.light { font-weight: 200; }
+.normal { font-weight: 400; }
+.bold { font-weight: 600; }
+.bolder { font-weight: 800; }
+.boldest { font-weight: 900; }
+.italic { font-style: italic; }
+.roman {font-style: normal; }
+.underline { text-decoration: underline; }
+.plain { text-decoration: none; }
+
+/* colors */
+
+.white { color: #ffffff; }
+.white_off { color: #f0f0f0; }
+.gray_lightest { color: #e0e0e0; }
+.gray_lighter { color: #d0d0d0; }
+.gray_light { color: #b0b0b0; }
+.gray { color: #909090; }
+.gray_dark { color: #707070; }
+.gray_darker { color: #505050; }
+.gray_darkest { color: #202020; }
+.black { color: #000000; }
+.red { color: #ff9900; }
+.yellow { color: #ffcc33; }
+.blue { color: #2b82ad; }
+
+/* END general classes */
