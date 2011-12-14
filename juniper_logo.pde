@@ -29,9 +29,6 @@ void draw(){
     if (key == ESC) {
       juniper0.reset(defaultPetals);
     }
-    if (key == 's') {
-      String json = juniper0.toJSON();
-    }
   }
   rot0 += PI/500;
   juniper0.setTilt(rot0);
@@ -91,10 +88,6 @@ class BasicJShape {
     int half = (int)(f/2);
     topLeft = new Poynt(-half, -50);
     topRight = new Poynt(half, -50);
-  }
-  
-  String toJSON(){
-    return "{center: { x:" + center.getX() + ", y:" + center.getY() + " }, tilt:" + tilt + ", scalar:" + scalar + ", alpha:" + alpha + " }";
   }
   
 }
@@ -174,22 +167,6 @@ class JuniperBurst {
     for(int i=0; i < numberOfPetals; i++) {
       addJShape();
     }
-  }
-  
-  String toJSON() {
-    return "{ position:{ x:" + position.getX() + ", y:" + position.getY() + "}, scalar:" + scalar + ", tilt:" + tilt + ", fatness:" + fatness + ", petals:" + petalsToJSON() + " }";
-  }
-  
-  String petalsToJSON() {
-    String json = "[";
-    for(int i=0; i < petals.size(); i++) {
-      json = json + petals.get(i).toJSON();
-      if (i < (petals.size() - 1)){
-        json = json + ", ";
-      }
-    }
-    json = json + "]";
-    return json;
   }
   
 }
