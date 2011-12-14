@@ -43,7 +43,9 @@
             padding-left: 30px;
         }
     </style>
-    
+    <script src="processing.js"></script> 
+    <script src="jquery.js"></script>
+    <script src="json2.js"></script>
 </head>
 
 <body>
@@ -55,10 +57,19 @@
     <li>Escape to reset.</li>
 </ul>
 
-<canvas data-processing-sources="juniper_logo.pde"></canvas>
+<canvas id="juniper_sketch" data-processing-sources="juniper_logo.pde"></canvas>
+<div>THIS IS GUFF</div>
+<button onclick="test()">TEST</button>
 
-<script src="processing.js"></script> 
-
+<script>
+  var test = function(){
+    var pjs = Processing.getInstanceById("juniper_sketch");
+    var burst = pjs.getBurst();
+    var burstJson = JSON.stringify(burst);
+    var newBurst = new pjs.JuniperBurst(new pjs.Poynt(burst.position.x,burst.position.y), burst.fatness, burst.scalar);
+    pjs.setBurst(newBurst, burst.petals.size());
+  }
+</script>
 </body>
 
 </html>

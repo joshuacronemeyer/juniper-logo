@@ -1,13 +1,14 @@
 float rot0 = 0.0;
 int nX, nY;
 JuniperBurst juniper0;
+final int defaultPetals = 6;
 
 void setup()
 {
   size(800,800);
   frameRate(20);
   juniper0 = new JuniperBurst(new Poynt(400,400));
-  juniper0.reset();
+  juniper0.reset(defaultPetals);
 }
 
 void draw(){
@@ -26,16 +27,24 @@ void draw(){
       }
     }
     if (key == ESC) {
-      juniper0.reset();
+      juniper0.reset(defaultPetals);
     }
     if (key == 's') {
       String json = juniper0.toJSON();
-      console.log(json);
     }
   }
   rot0 += PI/500;
   juniper0.setTilt(rot0);
   juniper0.display();
+}
+
+JuniperBurst getBurst(){
+  return juniper0;
+}
+
+void setBurst(JuniperBurst burst, int petalCount){
+  juniper0 = burst;
+  juniper0.resetPetals(petalCount);
 }
 
 void mouseMoved(){
@@ -107,6 +116,14 @@ class JuniperBurst {
     petals = new ArrayList();
   }
   
+  JuniperBurst(Poynt pos, int f, float s) {
+    fatness = f;
+    position = pos;
+    scalar = s;
+    tilt = 0;
+    petals = new ArrayList();
+  }
+  
   void display() {
     for(int i=0; i < petals.size(); i++) {
       petals.get(i).setTilt(pointOrientation(i) + tilt);
@@ -147,10 +164,14 @@ class JuniperBurst {
     return ((2*index)*PI/petals.size());
   }
   
-  void reset() {
+  void reset(int numberOfPetals) {
     fatness = default_fatness;
+    resetPetals(numberOfPetals);
+  }
+  
+  void resetPetals(int numberOfPetals) {
     petals = new ArrayList();
-    for(int i=0; i < 6; i++) {
+    for(int i=0; i < numberOfPetals; i++) {
       addJShape();
     }
   }
