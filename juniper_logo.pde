@@ -11,7 +11,7 @@ void setup()
 }
 
 void draw(){
-  background( 255 );  
+  background( 255 );
    
   if(keyPressed) {
     if (key == CODED) {
