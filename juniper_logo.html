@@ -46,6 +46,7 @@
     <script src="processing.js"></script> 
     <script src="jquery.js"></script>
     <script src="json2.js"></script>
+    <script src="cycle.js"></script>
 </head>
 
 <body>
@@ -62,10 +63,11 @@
 <button onclick="test()">TEST</button>
 
 <script>
+
   var test = function(){
     var pjs = Processing.getInstanceById("juniper_sketch");
-    var burst = pjs.getBurst();
-    var burstJson = JSON.stringify(burst);
+    burst = pjs.getBurst();
+    var burstJson = JSON.stringify(JSON.decycle(burst));
     var newBurst = new pjs.JuniperBurst(new pjs.Poynt(burst.position.x,burst.position.y), burst.fatness, burst.scalar);
     pjs.setBurst(newBurst, burst.petals.size());
   }
