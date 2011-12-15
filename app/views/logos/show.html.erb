@@ -4,17 +4,20 @@
     <li>Left/Right to change the node girth.</li>
     <li>Escape to reset.</li>
 </ul>
-<canvas id="juniper_sketch"></canvas>
+<canvas id="logo_editor"></canvas>
 
 <script>
 $(function(){
   // attach processing script to canvas the old fashioned way...  
-  $.get('/juniper_logo.pde', function(data) {
-    var p = new Processing($("#juniper_sketch").get(0), data);
-    var burstString = '(<%= @logo.json.html_safe %>)';    
-    var burst = eval(burstString);
-    var newBurst = new p.JuniperBurst(new p.Poynt(burst.position.x,burst.position.y), burst.fatness, burst.scalar);
-    p.setBurst(newBurst, burst.petals.length);
+  $.get('/juniper_logo_lib.pde', function(library_classes) {
+    $.get('/juniper_logo_editor.pde', function(logo_editor) {
+        var all_processing_scripts = library_classes + "\n" + logo_editor;
+        var p = new Processing($("#logo_editor").get(0), all_processing_scripts);
+        var burstString = '(<%= @logo.json.html_safe %>)';    
+        var burst = eval(burstString);
+        var newBurst = new p.JuniperBurst(new p.Poynt(400,400), burst.fatness, 200);
+        p.setBurst(newBurst, burst.petals.length);
+    });
   });
 });
 </script>

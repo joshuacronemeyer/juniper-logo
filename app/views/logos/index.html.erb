@@ -1,0 +1,20 @@
+<%= render partial:"juniper_logo", collection:[@juniper_logo], as: :logo %>
+<%= render partial:"logo", collection:@logos, as: :logo %>
+<script>
+  $(function(){
+    // attach processing script to canvas the old fashioned way...  
+    $.get('/juniper_logo_lib.pde', function(library_classes) {
+      $.get('/juniper_logo_viewer.pde', function(logo_viewer) {
+        var all_processing_scripts = library_classes + "\n" + logo_viewer;
+        <% logos_for_script = [@juniper_logo] + @logos %>
+        <% logos_for_script.each do |logo| %>
+          var p = new Processing($("#logo_<%= logo.id %>").get(0), all_processing_scripts);
+          var burstString = '(<%= logo.json.html_safe %>)';    
+          var burst = eval(burstString);
+          var newBurst = new p.JuniperBurst(new p.Poynt(150,150), burst.fatness, 100);
+          p.setBurst(newBurst, burst.petals.length);
+        <% end %>
+      });
+    });
+  });
+</script>
