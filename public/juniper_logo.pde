@@ -90,6 +90,10 @@ class BasicJShape {
     topRight = new Poynt(half, -50);
   }
   
+  String toJSON(){
+    return "{center: { x:" + center.getX() + ", y:" + center.getY() + " }, tilt:" + tilt + ", scalar:" + scalar + ", alpha:" + alpha + " }";
+  }
+  
 }
 
 class JuniperBurst {
@@ -167,6 +171,22 @@ class JuniperBurst {
     for(int i=0; i < numberOfPetals; i++) {
       addJShape();
     }
+  }
+  
+  String toJSON() {
+    return "{ position:{ x:" + position.getX() + ", y:" + position.getY() + "}, scalar:" + scalar + ", tilt:" + tilt + ", fatness:" + fatness + ", petals:" + petalsToJSON() + " }";
+  }
+  
+  String petalsToJSON() {
+    String json = "[";
+    for(int i=0; i < petals.size(); i++) {
+      json = json + petals.get(i).toJSON();
+      if (i < (petals.size() - 1)){
+        json = json + ", ";
+      }
+    }
+    json = json + "]";
+    return json;
   }
   
 }

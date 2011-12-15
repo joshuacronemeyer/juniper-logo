@@ -1,7 +1,2 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+juniper_logo = Logo.find_by_title("Juniper")
+Logo.create!(title:"Juniper", json:%{{ position:{ x:400, y:400}, scalar:200, tilt:0, fatness:68, petals:[{center: { x:400, y:400 }, tilt:0, scalar:2, alpha:180 }, {center: { x:400, y:400 }, tilt:0, scalar:2, alpha:100 }, {center: { x:400, y:400 }, tilt:0, scalar:2, alpha:100 }, {center: { x:400, y:400 }, tilt:0, scalar:2, alpha:100 }, {center: { x:400, y:400 }, tilt:0, scalar:2, alpha:100 }, {center: { x:400, y:400 }, tilt:0, scalar:2, alpha:100 }] }})
