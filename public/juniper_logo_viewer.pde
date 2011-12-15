@@ -12,6 +12,7 @@ void setup()
 
 void draw(){
   background( 255 );
+  rot0 += PI/500;
   juniper0.setTilt(rot0);
   juniper0.display();
 }

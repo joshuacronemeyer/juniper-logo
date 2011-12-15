@@ -4,6 +4,7 @@ gem 'rails', '3.1.3'
 gem "jquery-rails"
 gem "pg"
 gem 'randumb'
+gem "simple_form"
 
 group :assets do
   gem 'sass-rails',   '~> 3.1.5'

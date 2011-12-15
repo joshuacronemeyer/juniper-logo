@@ -5,19 +5,27 @@
     <li>Escape to reset.</li>
 </ul>
 <canvas id="logo_editor"></canvas>
-
+<%= simple_form_for @new_logo, :url => url_for(action:"create", controller:"logos"), :method => 'post' do |f| %>
+    <%= f.input :title %>
+    <%= f.hidden_field :json %>
+    <%= f.button :submit, :disable_with => "Creating..." %>
+<% end %>
 <script>
 $(function(){
   // attach processing script to canvas the old fashioned way...  
   $.get('/juniper_logo_lib.pde', function(library_classes) {
     $.get('/juniper_logo_editor.pde', function(logo_editor) {
         var all_processing_scripts = library_classes + "\n" + logo_editor;
-        var p = new Processing($("#logo_editor").get(0), all_processing_scripts);
+        p = new Processing($("#logo_editor").get(0), all_processing_scripts);
         var burstString = '(<%= @logo.json.html_safe %>)';    
         var burst = eval(burstString);
         var newBurst = new p.JuniperBurst(new p.Poynt(400,400), burst.fatness, 200);
         p.setBurst(newBurst, burst.petals.length);
     });
+  });
+  $("#new_logo").submit(function(eventObj){
+    var burstObj = p.getBurst();
+    $("#logo_json").val(burstObj.toJSON());
   });
 });
 </script>
